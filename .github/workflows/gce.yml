@@ -21,9 +21,9 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GKE_CLUSTER: cluster-2   # TODO: update to cluster name
-  GKE_ZONE: us-central1-c  # TODO: update to cluster zone
-  IMAGE: mysite
+  GKE_CLUSTER: cluster-2
+  GKE_ZONE: us-central1-c
+  IMAGE: static2
 
 jobs:
   setup-build-publish-deploy:
@@ -73,7 +73,6 @@ jobs:
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
       run: |-
-        echo gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
         ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
         ./kustomize build . | kubectl apply -f -
         kubectl rollout status deployment/$IMAGE
